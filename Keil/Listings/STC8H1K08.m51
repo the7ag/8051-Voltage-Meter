@@ -1,0 +1,237 @@
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    11/16/2024  22:39:33  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
+E:\PROGRAM FILES\C51\BIN\BL51.EXE .\Objects\main.obj, .\Objects\STARTUP.obj TO .\Objects\STC8H1K08 PRINT (.\Listings\STC
+>> 8H1K08.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\main.obj (MAIN)
+  .\Objects\STARTUP.obj (?C_STARTUP)
+  E:\PROGRAM FILES\C51\LIB\C51S.LIB (?C_INIT)
+  E:\PROGRAM FILES\C51\LIB\C51S.LIB (?C?UIDIV)
+
+
+LINK MAP OF MODULE:  .\Objects\STC8H1K08 (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0004H     UNIT         ?DT?MAIN
+            IDATA   000CH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0028H                  *** GAP ***
+            CODE    002BH     0003H     ABSOLUTE     
+                    002EH     07D2H                  *** GAP ***
+            CODE    0800H     008CH     UNIT         ?C_C51STARTUP
+            CODE    088CH     0055H     UNIT         ?C?LIB_CODE
+            CODE    08E1H     004BH     UNIT         ?PR?_UPDATEOUTPUTS?MAIN
+            CODE    092CH     0036H     UNIT         ?PR?MAIN?MAIN
+            CODE    0962H     002CH     UNIT         ?PR?ADC_ROUTINE?MAIN
+            CODE    098EH     0023H     UNIT         ?PR?ADC_INIT?MAIN
+            CODE    09B1H     0017H     UNIT         ?PR?GPIO_INIT?MAIN
+            CODE    09C8H     0007H     UNIT         ?C_INITSEG
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\STC8H1K08 (MAIN)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN
+  +--> ?PR?GPIO_INIT?MAIN
+  +--> ?PR?ADC_INIT?MAIN
+  +--> ?PR?_UPDATEOUTPUTS?MAIN
+
+
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/16/2024  22:39:33  PAGE 2
+
+
+
+UNRESOLVED EXTERNAL SYMBOLS:
+   SYS_SETCLOCK
+   _SYS_DELAY
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\STC8H1K08 (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0092H         PUBLIC        P1M0
+  D:0091H         PUBLIC        P1M1
+  B:00A8H.7       PUBLIC        EA
+  B:00A8H.5       PUBLIC        EADC
+  C:0962H         PUBLIC        ADC_Routine
+  D:00BDH         PUBLIC        ADC_RES
+  D:00DEH         PUBLIC        ADCCFG
+  D:0008H         PUBLIC        level
+  D:0009H         PUBLIC        flag
+  C:092CH         PUBLIC        main
+  C:09B1H         PUBLIC        GPIO_Init
+  D:000AH         PUBLIC        adc_result
+  D:00BCH         PUBLIC        ADC_CONTR
+  B:0090H.2       PUBLIC        P12
+  B:0090H.3       PUBLIC        P13
+  B:0090H.4       PUBLIC        P14
+  B:0090H.5       PUBLIC        P15
+  B:0090H.6       PUBLIC        P16
+  C:098EH         PUBLIC        ADC_Init
+  D:00BEH         PUBLIC        ADC_RESL
+  C:08E1H         PUBLIC        _UpdateOutputs
+  -------         PROC          ADC_ROUTINE
+  C:0962H         LINE#         33
+  C:096DH         LINE#         35
+  C:0970H         LINE#         36
+  C:0977H         LINE#         37
+  C:097FH         LINE#         38
+  C:0982H         LINE#         40
+  C:0985H         LINE#         41
+  -------         ENDPROC       ADC_ROUTINE
+  -------         PROC          GPIO_INIT
+  C:09B1H         LINE#         48
+  C:09B1H         LINE#         49
+  C:09B1H         LINE#         51
+  C:09BCH         LINE#         54
+  C:09C7H         LINE#         55
+  -------         ENDPROC       GPIO_INIT
+  -------         PROC          ADC_INIT
+  C:098EH         LINE#         64
+  C:098EH         LINE#         65
+  C:098EH         LINE#         67
+  C:0996H         LINE#         69
+  C:099EH         LINE#         71
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/16/2024  22:39:33  PAGE 3
+
+
+  C:09A1H         LINE#         73
+  C:09A3H         LINE#         74
+  C:09A5H         LINE#         76
+  C:09ADH         LINE#         78
+  C:09B0H         LINE#         79
+  -------         ENDPROC       ADC_INIT
+  -------         PROC          _UPDATEOUTPUTS
+  D:0006H         SYMBOL        adc_value
+  C:08E1H         LINE#         90
+  C:08E1H         LINE#         91
+  C:08E1H         LINE#         92
+  C:08E5H         LINE#         93
+  C:08E5H         LINE#         94
+  C:08E8H         LINE#         96
+  C:08F0H         LINE#         99
+  C:08F2H         LINE#         100
+  C:08F4H         LINE#         101
+  C:08F6H         LINE#         102
+  C:08F8H         LINE#         103
+  C:08FAH         LINE#         106
+  C:0903H         LINE#         107
+  C:090CH         LINE#         108
+  C:0915H         LINE#         109
+  C:091EH         LINE#         112
+  C:092BH         LINE#         113
+  C:092BH         LINE#         114
+  -------         ENDPROC       _UPDATEOUTPUTS
+  -------         PROC          MAIN
+  C:092CH         LINE#         122
+  C:092CH         LINE#         123
+  C:092CH         LINE#         125
+  C:092FH         LINE#         128
+  C:0932H         LINE#         131
+  C:0935H         LINE#         133
+  C:0935H         LINE#         134
+  C:0935H         LINE#         136
+  C:0945H         LINE#         137
+  C:0945H         LINE#         139
+  C:0948H         LINE#         140
+  C:0950H         LINE#         141
+  C:0952H         LINE#         143
+  C:0952H         LINE#         145
+  C:0959H         LINE#         146
+  C:0959H         LINE#         149
+  C:0960H         LINE#         150
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        ?C_STARTUP
+  C:0800H         SEGMENT       ?C_C51STARTUP
+  I:000CH         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  11/16/2024  22:39:33  PAGE 4
+
+
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0803H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:0800H         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:0800H         LINE#         133
+  C:0802H         LINE#         134
+  C:0803H         LINE#         135
+  C:0804H         LINE#         136
+  C:0806H         LINE#         185
+  C:0809H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        ?C?UIDIV
+  C:088CH         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _SYS_DELAY
+    MODULE:  .\Objects\main.obj (MAIN)
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  SYS_SETCLOCK
+    MODULE:  .\Objects\main.obj (MAIN)
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  SYS_SETCLOCK
+    MODULE:  .\Objects\main.obj (MAIN)
+    ADDRESS: 092DH
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _SYS_DELAY
+    MODULE:  .\Objects\main.obj (MAIN)
+    ADDRESS: 095EH
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 00FFH BYTE (12%) *
+******************************************************************************
+
+Program Size: data=13.0 xdata=0 code=469
+LINK/LOCATE RUN COMPLETE.  4 WARNING(S),  0 ERROR(S)

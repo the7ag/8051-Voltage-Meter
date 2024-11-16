@@ -1,0 +1,180 @@
+C51 COMPILER V9.60.7.0   MAIN                                                              11/16/2024 22:39:32 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\Program Files\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE INCDIR(.\FwLib_STC8\include;.\FwLi
+                    -b_STC8\include) DEFINE(__CX51__,__CONF_MCU_MODEL=MCU_MODEL_STC8H3K32S2,__CONF_FOSC=36864000UL) DEBUG OBJECTEXTEND PRINT(
+                    -.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          /*
+   2           * Copyright 2024 mohamed ali <the7ag22477@gmail.com>
+   3           *
+   4           * Licensed under the Apache License, Version 2.0 (the "License");
+   5           * you may not use this file except in compliance with the License.
+   6           * You may obtain a copy of the License at
+   7           * 
+   8           *     http://www.apache.org/licenses/LICENSE-2.0
+   9           * 
+  10           * Unless required by applicable law or agreed to in writing, software
+  11           * distributed under the License is distributed on an "AS IS" BASIS,
+  12           * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  13           * See the License for the specific language governing permissions and
+  14           * limitations under the License.
+  15           *
+  16           * STC8H1K08
+  17           *   AVref   -> VCC 
+  18           *   Vcc     -> VCC
+  19           *   Gnd     -> GND
+  20           *   ADC1    -> Test voltage
+  21          */
+  22          
+  23          #include "fw_hal.h"
+  24          
+  25          uint16_t adc_result;
+  26          uint8_t flag=0;
+  27          uint8_t level=0;
+  28          // Define GPIO pins for LEDs and Buzzer
+  29          #define LED_PIN_BASE GPIO_Pin_2 // Assume LEDs are connected to P1.2 - P1.5
+  30          #define BUZZER_PIN GPIO_Pin_6   // Assume buzzer is connected to P1.6
+  31          
+  32          // Interrupt Service Routine for ADC
+  33          INTERRUPT(ADC_Routine, EXTI_VectADC)
+  34          {
+  35   1          ADC_ClearInterrupt();
+  36   1          adc_result = ADC_RESL;
+  37   1          adc_result |= (ADC_RES & 0x0F) << 8;
+  38   1          flag=1;
+  39   1          // Restart ADC for continuous sampling
+  40   1          ADC_Start();
+  41   1      }
+  42          /**
+  43           * @brief Initializes the GPIO pins for LEDs and Buzzer.
+  44           *
+  45           * This function configures GPIO pins P1.2 to P1.5 as output pins for LEDs,
+  46           * and P1.6 as an output pin for the buzzer. It also sets P1.1 as an input pin.
+  47           */
+  48          void GPIO_Init(void)
+  49          {
+  50   1          // Configure P1.2 to P1.5 as output for LEDs and P1.6 for Buzzer
+  51   1          GPIO_P1_SetMode(GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5 | BUZZER_PIN, GPIO_Mode_Output_PP);
+  52   1          
+  53   1          // Configure P1.1 as an input pin
+C51 COMPILER V9.60.7.0   MAIN                                                              11/16/2024 22:39:32 PAGE 2   
+
+  54   1          GPIO_P1_SetMode(GPIO_Pin_1, GPIO_Mode_Input_HIP);
+  55   1      }
+  56          /**
+  57           * @brief Initializes the ADC module.
+  58           *
+  59           * This function sets up the ADC module by selecting the
+  60           * first channel (GPIO P1.1), setting the clock prescaler
+  61           * to 15, aligning the result to the right, and enabling
+  62           * the ADC interrupt. It also starts the ADC conversion.
+  63           */
+  64          void ADC_Init(void)
+  65          {
+  66   1          // Select the first channel (GPIO P1.1)
+  67   1          ADC_SetChannel(0x01);
+  68   1          // Set the clock prescaler to 15
+  69   1          ADC_SetClockPrescaler(0x0F);
+  70   1          // Align the result to the right
+  71   1          ADC_SetResultAlignmentRight();
+  72   1          // Enable the ADC interrupt
+  73   1          EXTI_Global_SetIntState(HAL_State_ON);
+  74   1          EXTI_ADC_SetIntState(HAL_State_ON);
+  75   1          // Turn on the ADC power
+  76   1          ADC_SetPowerState(HAL_State_ON);
+  77   1          // Start the ADC conversion
+  78   1          ADC_Start();
+  79   1      }
+  80          
+  81          /**
+  82           * @brief Updates the LEDs and buzzer based on the ADC result.
+  83           *
+  84           * This function takes the ADC result and maps it to a level between 0 and 10.
+  85           * It then turns off all LEDs, and turns on the LEDs up to the current level.
+  86           * If the level is 10, it also activates the buzzer.
+  87           *
+  88           * @param adc_value The ADC result value
+  89           */
+  90          void UpdateOutputs(uint16_t adc_value)
+  91          {
+  92   1          if (flag)
+  93   1          {
+  94   2              flag = 0;
+  95   2              // Map ADC result to voltage levels (example: 0-1023 mapped to 10 levels)
+  96   2              level = adc_value / 102; // Each level covers ~102 ADC units (10-bit ADC)
+  97   2      
+  98   2              // Turn off all LEDs
+  99   2              P12 = RESET;
+ 100   2              P13 = RESET;
+ 101   2              P14 = RESET;
+ 102   2              P15 = RESET;
+ 103   2              P16 = RESET;
+ 104   2      
+ 105   2              // Turn on LEDs up to the current level
+ 106   2              if (level >= 1) P12 = SET;
+ 107   2              if (level >= 4) P13 = SET;
+ 108   2              if (level >= 7) P14 = SET;
+ 109   2              if (level >= 10) P15 = SET;
+ 110   2      
+ 111   2              // Activate buzzer if at the highest level
+ 112   2              P16 = (level >= 10) ? SET : RESET;
+ 113   2          }
+ 114   1      }
+ 115          /**
+C51 COMPILER V9.60.7.0   MAIN                                                              11/16/2024 22:39:32 PAGE 3   
+
+ 116           * @brief The main entry point of the program.
+ 117           *
+ 118           * This function initializes the system clock, GPIO, and ADC,
+ 119           * and enters an infinite loop to continuously read ADC values
+ 120           * and update the LEDs and buzzer accordingly.
+ 121           */
+ 122          void main(void)
+ 123          {
+ 124   1          // Initialize the system clock
+ 125   1          SYS_SetClock();
+ 126   1      
+ 127   1          // Initialize the GPIO
+ 128   1          GPIO_Init();
+ 129   1      
+ 130   1          // Initialize the ADC
+ 131   1          ADC_Init();
+ 132   1      
+ 133   1          while (1)
+ 134   1          {
+ 135   2              // Check for errors
+ 136   2              if (adc_result == 0 || adc_result == 0xFFFF)
+ 137   2              {
+ 138   3                  // Handle error, e.g. reset ADC
+ 139   3                  ADC_SetPowerState(HAL_State_OFF);
+ 140   3                  ADC_SetPowerState(HAL_State_ON);
+ 141   3              }
+ 142   2              else
+ 143   2              {
+ 144   3                  // Update LEDs and buzzer based on ADC result
+ 145   3                  UpdateOutputs(adc_result);
+ 146   3              }
+ 147   2      
+ 148   2              // Delay for 100ms
+ 149   2              SYS_Delay(100);
+ 150   2          }
+ 151   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    231    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
