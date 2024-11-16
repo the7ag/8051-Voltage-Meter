@@ -1,7 +1,3 @@
-Here’s a detailed GitHub README for your voltage meter project:
-
----
-
 # Battery-Powered Voltage Meter
 
 A simple battery-powered voltage meter built using an STC microcontroller. This project measures voltage levels using the ADC, displays the levels via LEDs, and triggers a buzzer at the highest voltage level.
